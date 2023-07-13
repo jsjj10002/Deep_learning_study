@@ -1,44 +1,21 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
 
 import numpy as np
-
-
-# In[2]:
-
-
 #inout layer
 X = np.array([1.0,0.5])
 W1=np.array([[0.1,0.3,0.5],[0.2,0.4,0.6]])
 B1=np.array([0.1,0.2,0.3])
-
-print(W1.shape)
-print(X.shape)
-print(B1.shape)
-
+print(W1.shape) # (2,3)
+print(X.shape) # (2, )
+print(B1.shape) # (3, )
+#입력 층에서 1층으로 
 A1=np.dot(X,W1)+B1
-
-
-# In[3]:
-
-
+#활성화 함수-시그모이드 
 def sigmoid(x):
     return 1/(1+np.exp(-x))
 
-
-# In[4]:
-
-
-Z1=sigmoid(A1)
+Z1=sigmoid(A1) #가중치 합을 활성홤수로 변환시킴 
 print(A1)
-print(Z1)
-
-
-# In[5]:
-
+print(Z1) #넘파이 배열을 반환 
 
 #Hidden layer
 W2=np.array([[0.1,0.4],[0.2,0.5],[0.3,0.6]])
@@ -50,13 +27,10 @@ print(B2.shape)
 A2=np.dot(Z1,W2)+B2
 Z2=sigmoid(A2)
 
-
-# In[6]:
-
-
 #output layer
+#항등 함수 정의 
 def identity_function(x):
-    return x
+    return x # 입력을 그대로 출력 
 
 W3=np.array([[0.1,0.3],[0.2,0.4]])
 B3=np.array([0.1,0.2])
@@ -64,11 +38,9 @@ B3=np.array([0.1,0.2])
 A3=np.dot(Z2,W3)+B3
 Y=identity_function(A3) #Y=A3
 
+#출력층의 활성화 함수: 풀고자 하는 문제의 성질에 맞게 정함 
 
 # ## 구현 정리
-
-# In[7]:
-
 
 import numpy as np
 #implement activation function
@@ -79,7 +51,7 @@ def identity_function(x):
     return x
 #Initialize weight & bias
 def init_network():
-    network = {} #save weight and bias at dictionary
+    network = {} #save weight and bias at dictionary #각 층에 필요한 매게변수 저장 
     network['W1'] = np.array([[0.1,0.3,0.5],[0.2,0.4,0.6]])
     network['b1'] = np.array([0.1,0.2,0.3])
     network['W2'] = np.array([[0.1,0.4],[0.2,0.5],[0.3,0.6]])
@@ -102,7 +74,7 @@ def forward(network, x):
     
     return y
 
-network = init_network()
+network = init_network() #가중치와 편향을 초기화, 이들을 딕셔너리 변수인 network에 저장 
 x = np.array([1.0,0.5])
 y = forward(network,x)
 print(y)
