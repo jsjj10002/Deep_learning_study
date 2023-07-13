@@ -4,7 +4,7 @@ A = np.array([1,2,3,4])
 print(A)
 #[1 2 3 4]
 #Dimensions of the array
-np.ndim(A)
+np.ndim(A) 
 # 1 
 A.shape #Return a tuple/ 배열의 형상 확인 
 # (4, )
