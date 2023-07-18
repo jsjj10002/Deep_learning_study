@@ -1,22 +1,9 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
+#그래디언트 : 모든 변수의 편미분을 벡터로 정리한 것 
 import numpy as np
-
-
-# In[2]:
-
 
 def function_2(x):
     return x[0]**2 + x[1]**2 #인수x : 넘파이 배열
     # return np.sum(x**2)
-
-
-# In[3]:
-
 
 #기울기(모든 변수의 편미분을 백터로 정리) 구현
 def numerical_gradient(f,x): #인수 f는 함수, x는 넘파이 배열
@@ -37,32 +24,22 @@ def numerical_gradient(f,x): #인수 f는 함수, x는 넘파이 배열
         
     return grad
 
-
-# In[4]:
-
-
+#세 점 (3,4), (0,2), (3,0)에서의 기울기 구하기 
 numerical_gradient(function_2, np.array([3.0, 4.0]))
-
-
-# In[5]:
-
-
+# array([6., 8.])
 numerical_gradient(function_2, np.array([0.0, 2.0]))
-
-
-# In[6]:
-
-
+# array([0., 4.])
 numerical_gradient(function_2, np.array([3.0, 0.0]))
+# array([6., 0.])
+# 기욹가 가르키는 쪽: 각 장소에서 함수의 출력값을 가장 크게 줄이는 방향 
 
+# 경사 하강법 (gradient descent methood): 손실함수가 최솟값일 때의 매게변수 값 찾기 
+#손실함수의 기울기가 가리키는 곳 (기울기가 0인 곳 )-반드시 최소는 아님 
 
-# 경사 하강법 (gradient descent methood)
-
-# In[7]:
-
-
-def gradient_descent(f, init_x, lr=0.01, step_num=100): #lr: 학습률, step_num: 반복횟수 
-    x = init_x
+#경사하강법 구현
+# 학습률: 한 번의 학습으로 얼마나 학습하는지  
+def gradient_descent(f, init_x, lr=0.01, step_num=100): #lr: 학습률, step_num: 반복횟수 , f: 최적화 하려는 함수 
+    x = init_x #init_x: 초기값 
     
     for i in range(step_num):
         grad = numerical_gradient(f,x)
@@ -72,39 +49,23 @@ def gradient_descent(f, init_x, lr=0.01, step_num=100): #lr: 학습률, step_num
 
 # 경사법으로 $f(x_0,x_1)=x_0^2+x_1^2$의 최솟값 구하기
 
-# In[8]:
-
-
 def function_2(x):
     return x[0]**2+x[1]**2
 
-
-# In[9]:
-
-
 init_x=np.array([-3.0,4.0])
 gradient_descent(function_2, init_x, lr=0.1, step_num=100)
-
-
-# In[10]:
-
 
 #학습률이 너무 큰 경우-큰 값으로 발산
 init_x=np.array([-3.0,4.0])
 gradient_descent(function_2, init_x, lr=10.0, step_num=100)
 
 
-# In[11]:
-
-
 #학습률이 너무 작은 경우 - 거의 갱신되지 않음 
 init_x=np.array([-3.0,4.0])
 gradient_descent(function_2, init_x, lr=1e-10, step_num=100)
+#학습률 같이 직접 정해야하는 변수: 하이퍼파라미터 
 
-
-# In[12]:
-
-
+#실제 기울기를 구하는 코드 코드 구현 
 import sys, os
 sys.path.append(os.pardir)
 import numpy as np
@@ -125,37 +86,22 @@ class simpleNet:
         
         return loss
 
-
-# In[13]:
-
-
 net = simpleNet()
-print(net.W)
-
-
-# In[14]:
-
+print(net.W) # 가중치 매게변수 
 
 x = np.array([0.6, 0.9])
 p = net.predict(x)
 print(p)
-
-
-# In[15]:
-
-
-np.argmax(p)
-
-
-# In[16]:
-
-
-t=np.array([0,0,1])
+np.argmax(p)# 최댓값 인덱스 
+t=np.array([0,0,1]) #정답 레이블 
 net.loss(x,t)
 
+def f(W):
+    return net.loss(x, t)
 
-# In[ ]:
+dW = numerical_gradient(f, net.W)
+print(dW)
 
-
-
-
+#lambda를 이용해 간단히 구현 
+f = lambda w: net.loss(x, t)
+dw = numerical_gradient(f, net.W)
